@@ -1,0 +1,926 @@
+* {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+
+    -color-ink: #183153;
+    -color-muted: #6c7a89;
+    -color-paper: #f5efe6;
+    -color-surface: #fffaf4;
+    -color-surface-strong: #ffffff;
+    -color-border: #d7c7b2;
+    -color-primary: #1f4e5f;
+    -color-primary-strong: #173b48;
+    -color-primary-soft: #e2edf1;
+    -color-accent: #c28b4e;
+    -color-accent-strong: #a86f30;
+    -color-success: #2e7d5b;
+    -color-danger: #b9534f;
+    -color-shadow: rgba(22, 39, 59, 0.12);
+}
+
+.root {
+    -fx-background-color: linear-gradient(to bottom, #f8f2e9 0%, #efe6da 100%);
+    -fx-font-size: 13px;
+    -fx-text-fill: -color-ink;
+}
+
+.border-pane,
+.pane,
+.anchor-pane,
+.vbox,
+.hbox {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+    -fx-fit-to-width: true;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.page-shell {
+    -fx-padding: 24px 28px 28px 28px;
+    -fx-spacing: 22px;
+}
+
+.page-header {
+    -fx-padding: 28px 32px;
+    -fx-background-color: linear-gradient(to right, #173b48 0%, #245c6e 70%, #2b6d82 100%);
+    -fx-background-radius: 14px;
+    -fx-border-radius: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(18, 35, 52, 0.18), 24, 0.25, 0, 8);
+}
+
+.page-header .label {
+    -fx-text-fill: #fffaf2;
+}
+
+.page-title {
+    -fx-font-size: 30px;
+    -fx-font-weight: 800;
+    -fx-letter-spacing: 0.4px;
+}
+
+.page-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 250, 242, 0.82);
+}
+
+.section-card {
+    -fx-background-color: linear-gradient(to bottom, rgba(255, 250, 244, 0.98), rgba(255, 255, 255, 0.94));
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: rgba(194, 139, 78, 0.22);
+    -fx-border-width: 1px;
+    -fx-padding: 22px 24px 24px 24px;
+    -fx-spacing: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(17, 34, 51, 0.08), 18, 0.18, 0, 6);
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -color-ink;
+}
+
+.section-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-muted;
+}
+
+.toolbar {
+    -fx-spacing: 12px;
+    -fx-alignment: center-left;
+}
+
+.metric-strip {
+    -fx-padding: 18px 20px;
+    -fx-background-color: linear-gradient(to right, rgba(31, 78, 95, 0.08), rgba(194, 139, 78, 0.12));
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: rgba(31, 78, 95, 0.09);
+}
+
+.metric-card {
+    -fx-spacing: 6px;
+    -fx-padding: 16px 20px;
+    -fx-background-color: rgba(255, 255, 255, 0.78);
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: rgba(194, 139, 78, 0.18);
+}
+
+.metric-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -color-muted;
+}
+
+.metric-value {
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+    -fx-text-fill: -color-primary;
+}
+
+.form-grid {
+    -fx-hgap: 18px;
+    -fx-vgap: 16px;
+}
+
+.form-field {
+    -fx-spacing: 8px;
+}
+
+.field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -color-ink;
+}
+
+.helper-text {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-muted;
+}
+
+.button,
+.btn {
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-padding: 11px 18px;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.button:hover,
+.btn:hover {
+    -fx-opacity: 0.96;
+}
+
+.button:pressed,
+.btn:pressed {
+    -fx-opacity: 0.88;
+}
+
+.btn-primary,
+.button-primary {
+    -fx-background-color: linear-gradient(to bottom, -color-primary 0%, -color-primary-strong 100%);
+    -fx-effect: dropshadow(gaussian, rgba(31, 78, 95, 0.22), 12, 0.15, 0, 4);
+}
+
+.btn-secondary,
+.button-secondary {
+    -fx-background-color: linear-gradient(to bottom, -color-accent 0%, -color-accent-strong 100%);
+    -fx-effect: dropshadow(gaussian, rgba(194, 139, 78, 0.22), 12, 0.15, 0, 4);
+}
+
+.btn-outline-primary {
+    -fx-background-color: rgba(255, 255, 255, 0.7);
+    -fx-border-color: rgba(31, 78, 95, 0.35);
+    -fx-border-width: 1px;
+    -fx-text-fill: -color-primary;
+}
+
+.btn-danger {
+    -fx-background-color: linear-gradient(to bottom, #cb695f 0%, -color-danger 100%);
+}
+
+.text-field,
+.combo-box,
+.date-picker,
+.text-area {
+    -fx-background-color: -color-surface-strong;
+    -fx-background-insets: 0;
+    -fx-control-inner-background: -color-surface-strong;
+    -fx-border-color: rgba(24, 49, 83, 0.14);
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 11px 14px;
+    -fx-text-fill: -color-ink;
+    -fx-prompt-text-fill: rgba(108, 122, 137, 0.75);
+}
+
+.text-field:focused,
+.combo-box:focused,
+.date-picker:focused,
+.text-area:focused {
+    -fx-border-color: -color-accent;
+    -fx-effect: dropshadow(gaussian, rgba(194, 139, 78, 0.16), 10, 0.12, 0, 0);
+}
+
+.combo-box .arrow-button,
+.date-picker .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box .arrow,
+.date-picker .arrow {
+    -fx-background-color: -color-primary;
+}
+
+.date-picker-popup > .month-year-pane {
+    -fx-background-color: -color-primary;
+}
+
+.date-picker-popup > * > .day-cell:selected,
+.date-picker-popup > * > .selected {
+    -fx-background-color: -color-accent;
+    -fx-text-fill: white;
+}
+
+.separator .line {
+    -fx-border-color: rgba(24, 49, 83, 0.12);
+}
+
+.table-panel {
+    -fx-spacing: 14px;
+}
+
+.table-view {
+    -fx-background-color: rgba(255, 255, 255, 0.82);
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: rgba(24, 49, 83, 0.08);
+    -fx-border-width: 1px;
+    -fx-padding: 0;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to right, #214f5f 0%, #2c667a 100%);
+    -fx-background-radius: 10px 10px 0 0;
+    -fx-padding: 10px 0;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #fffaf4;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.table-row-cell {
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-border-color: transparent transparent rgba(24, 49, 83, 0.05) transparent;
+    -fx-padding: 4px 0;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: rgba(245, 239, 230, 0.72);
+}
+
+.table-row-cell:selected {
+    -fx-background-color: rgba(194, 139, 78, 0.16);
+    -fx-table-cell-border-color: transparent;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: rgba(31, 78, 95, 0.08);
+}
+
+.table-cell {
+    -fx-text-fill: -color-ink;
+    -fx-padding: 12px 10px;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:empty,
+.table-row-cell:empty .table-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.tab-pane {
+    -fx-background-color: transparent;
+    -fx-tab-min-width: 135px;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 6px 0 0 0;
+}
+
+.tab-pane .headers-region {
+    -fx-background-color: transparent;
+}
+
+.tab {
+    -fx-background-color: rgba(255, 250, 244, 0.8);
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-border-radius: 8px 8px 0 0;
+    -fx-border-color: rgba(24, 49, 83, 0.08);
+    -fx-border-width: 1px 1px 0 1px;
+    -fx-padding: 10px 18px;
+}
+
+.tab:selected {
+    -fx-background-color: linear-gradient(to bottom, #ffffff 0%, #fff7ed 100%);
+    -fx-border-color: rgba(194, 139, 78, 0.35);
+}
+
+.tab .tab-label {
+    -fx-text-fill: -color-muted;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: -color-primary;
+}
+
+.tab-content-area {
+    -fx-background-color: transparent;
+    -fx-padding: 12px 0 0 0;
+}
+
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .track {
+    -fx-background-color: rgba(24, 49, 83, 0.07);
+    -fx-background-radius: 999px;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: rgba(31, 78, 95, 0.35);
+    -fx-background-radius: 999px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: rgba(31, 78, 95, 0.5);
+}
+
+.context-menu {
+    -fx-background-color: -color-surface-strong;
+    -fx-background-radius: 8px;
+    -fx-border-color: rgba(24, 49, 83, 0.12);
+    -fx-border-radius: 8px;
+}
+
+.menu-item:focused {
+    -fx-background-color: rgba(31, 78, 95, 0.08);
+}
+
+.tooltip {
+    -fx-background-color: -color-primary;
+    -fx-text-fill: white;
+    -fx-background-radius: 6px;
+}
+
+.dialog-pane {
+    -fx-background-color: -color-surface;
+}
+
+/* Compact light/dark overrides */
+.root,
+.light-theme {
+    -app-bg: #f3f4f6;
+    -panel-bg: #ffffff;
+    -panel-alt: #f8fafc;
+    -header-bg: #e5e7eb;
+    -text-main: #111827;
+    -text-muted: #6b7280;
+    -border: #d1d5db;
+    -primary: #2563eb;
+    -danger: #dc2626;
+}
+
+.dark-theme {
+    -app-bg: #0f172a;
+    -panel-bg: #111827;
+    -panel-alt: #1f2937;
+    -header-bg: #111827;
+    -text-main: #f9fafb;
+    -text-muted: #94a3b8;
+    -border: #334155;
+    -primary: #60a5fa;
+    -danger: #f87171;
+}
+
+.root,
+.light-theme,
+.dark-theme {
+    -fx-background-color: -app-bg;
+}
+
+.light-theme .label,
+.dark-theme .label {
+    -fx-text-fill: -text-main;
+}
+
+.light-theme .page-shell,
+.dark-theme .page-shell {
+    -fx-padding: 10px 12px 12px 12px;
+    -fx-spacing: 10px;
+}
+
+.light-theme .page-header,
+.dark-theme .page-header {
+    -fx-padding: 12px 14px;
+    -fx-spacing: 10px;
+    -fx-background-color: -header-bg;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: -border;
+    -fx-border-width: 1px;
+    -fx-effect: null;
+}
+
+.light-theme .page-title,
+.dark-theme .page-title {
+    -fx-font-size: 22px;
+}
+
+.light-theme .page-subtitle,
+.dark-theme .page-subtitle,
+.light-theme .section-subtitle,
+.dark-theme .section-subtitle,
+.light-theme .metric-label,
+.dark-theme .metric-label {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 11px;
+}
+
+.light-theme .section-card,
+.dark-theme .section-card {
+    -fx-background-color: -panel-bg;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: -border;
+    -fx-border-width: 1px;
+    -fx-padding: 12px;
+    -fx-spacing: 8px;
+}
+
+.light-theme .toolbar,
+.dark-theme .toolbar {
+    -fx-spacing: 8px;
+}
+
+.light-theme .form-field,
+.dark-theme .form-field {
+    -fx-spacing: 4px;
+}
+
+.light-theme .field-label,
+.dark-theme .field-label {
+    -fx-font-size: 11px;
+}
+
+.light-theme .metric-strip,
+.dark-theme .metric-strip {
+    -fx-padding: 8px;
+    -fx-spacing: 8px;
+    -fx-background-color: -panel-alt;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: -border;
+}
+
+.light-theme .metric-card,
+.dark-theme .metric-card {
+    -fx-padding: 8px 10px;
+    -fx-spacing: 4px;
+    -fx-background-color: -panel-bg;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: -border;
+}
+
+.light-theme .metric-value,
+.dark-theme .metric-value {
+    -fx-font-size: 15px;
+    -fx-text-fill: -text-main;
+}
+
+.light-theme .button,
+.dark-theme .button,
+.light-theme .btn,
+.dark-theme .btn {
+    -fx-padding: 7px 12px;
+    -fx-font-size: 12px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+}
+
+.light-theme .btn-primary,
+.dark-theme .btn-primary {
+    -fx-background-color: -primary;
+    -fx-text-fill: white;
+    -fx-effect: null;
+}
+
+.light-theme .btn-secondary,
+.dark-theme .btn-secondary {
+    -fx-background-color: -panel-alt;
+    -fx-text-fill: -text-main;
+    -fx-border-color: -border;
+    -fx-border-width: 1px;
+    -fx-effect: null;
+}
+
+.light-theme .btn-outline-primary,
+.dark-theme .btn-outline-primary {
+    -fx-background-color: transparent;
+    -fx-border-color: -primary;
+    -fx-border-width: 1px;
+    -fx-text-fill: -primary;
+}
+
+.light-theme .btn-danger,
+.dark-theme .btn-danger {
+    -fx-background-color: -danger;
+}
+
+.light-theme .text-field,
+.dark-theme .text-field,
+.light-theme .combo-box,
+.dark-theme .combo-box,
+.light-theme .date-picker,
+.dark-theme .date-picker,
+.light-theme .text-area,
+.dark-theme .text-area {
+    -fx-background-color: -panel-bg;
+    -fx-control-inner-background: -panel-bg;
+    -fx-text-fill: -text-main;
+    -fx-prompt-text-fill: -text-muted;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: -border;
+    -fx-border-width: 1px;
+    -fx-padding: 7px 9px;
+    -fx-effect: null;
+}
+
+.light-theme .combo-box .arrow,
+.dark-theme .combo-box .arrow,
+.light-theme .date-picker .arrow,
+.dark-theme .date-picker .arrow {
+    -fx-background-color: -text-main;
+}
+
+.light-theme .text-field:focused,
+.dark-theme .text-field:focused,
+.light-theme .combo-box:focused,
+.dark-theme .combo-box:focused,
+.light-theme .date-picker:focused,
+.dark-theme .date-picker:focused,
+.light-theme .text-area:focused,
+.dark-theme .text-area:focused {
+    -fx-border-color: -primary;
+}
+
+.light-theme .table-view,
+.dark-theme .table-view {
+    -fx-background-color: -panel-bg;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: -border;
+}
+
+.light-theme .table-view .column-header-background,
+.dark-theme .table-view .column-header-background {
+    -fx-background-color: -panel-alt;
+    -fx-background-radius: 4px 4px 0 0;
+    -fx-padding: 8px 0;
+}
+
+.light-theme .table-view .column-header .label,
+.dark-theme .table-view .column-header .label,
+.light-theme .table-cell,
+.dark-theme .table-cell,
+.light-theme .tab .tab-label,
+.dark-theme .tab .tab-label {
+    -fx-text-fill: -text-main;
+}
+
+.light-theme .table-row-cell,
+.dark-theme .table-row-cell {
+    -fx-background-color: -panel-bg;
+    -fx-border-color: transparent transparent -border transparent;
+    -fx-padding: 1px 0;
+}
+
+.light-theme .table-row-cell:odd,
+.dark-theme .table-row-cell:odd {
+    -fx-background-color: -panel-alt;
+}
+
+.dark-theme .table-row-cell:selected {
+    -fx-background-color: #1e3a5f;
+}
+
+.light-theme .tab,
+.dark-theme .tab {
+    -fx-background-color: -panel-alt;
+    -fx-background-radius: 4px 4px 0 0;
+    -fx-border-radius: 4px 4px 0 0;
+    -fx-border-color: -border;
+    -fx-border-width: 1px 1px 0 1px;
+    -fx-padding: 7px 12px;
+}
+
+.light-theme .tab:selected,
+.dark-theme .tab:selected {
+    -fx-background-color: -panel-bg;
+}
+
+/* Plain final overrides for a simple student-project look */
+.root {
+    -fx-background-color: #f4f4f4;
+    -fx-font-size: 12px;
+}
+
+.page-shell {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}
+
+.page-header {
+    -fx-padding: 12px;
+    -fx-background-color: #dbe4f0;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #b7c4d6;
+    -fx-border-width: 1px;
+    -fx-effect: null;
+}
+
+.page-header .label,
+.section-title,
+.field-label,
+.table-view .column-header .label,
+.table-cell,
+.label {
+    -fx-text-fill: #222222;
+}
+
+.page-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.page-subtitle,
+.section-subtitle,
+.metric-label {
+    -fx-text-fill: #555555;
+    -fx-font-size: 11px;
+}
+
+.section-card,
+.metric-strip,
+.metric-card,
+.table-view,
+.tab,
+.text-field,
+.combo-box,
+.date-picker,
+.text-area,
+.button,
+.btn {
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+}
+
+.section-card {
+    -fx-background-color: white;
+    -fx-border-color: #cfcfcf;
+    -fx-border-width: 1px;
+    -fx-padding: 12px;
+    -fx-spacing: 8px;
+    -fx-effect: null;
+}
+
+.toolbar,
+.form-field {
+    -fx-spacing: 6px;
+}
+
+.button,
+.btn {
+    -fx-padding: 6px 10px;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.btn-primary,
+.button-primary {
+    -fx-background-color: #2d6cdf;
+    -fx-text-fill: white;
+    -fx-effect: null;
+}
+
+.btn-secondary,
+.button-secondary {
+    -fx-background-color: #eeeeee;
+    -fx-border-color: #c0c0c0;
+    -fx-border-width: 1px;
+    -fx-text-fill: #222222;
+    -fx-effect: null;
+}
+
+.btn-outline-primary {
+    -fx-background-color: white;
+    -fx-border-color: #2d6cdf;
+    -fx-border-width: 1px;
+    -fx-text-fill: #2d6cdf;
+}
+
+.btn-danger {
+    -fx-background-color: #d9534f;
+    -fx-text-fill: white;
+}
+
+.text-field,
+.combo-box,
+.date-picker,
+.text-area {
+    -fx-background-color: white;
+    -fx-control-inner-background: white;
+    -fx-border-color: #c0c0c0;
+    -fx-border-width: 1px;
+    -fx-padding: 6px 8px;
+    -fx-text-fill: #222222;
+    -fx-prompt-text-fill: #777777;
+    -fx-effect: null;
+}
+
+.text-field:focused,
+.combo-box:focused,
+.date-picker:focused,
+.text-area:focused {
+    -fx-border-color: #2d6cdf;
+}
+
+.metric-strip {
+    -fx-padding: 8px;
+    -fx-spacing: 8px;
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #d5d5d5;
+}
+
+.metric-card {
+    -fx-padding: 8px;
+    -fx-spacing: 4px;
+    -fx-background-color: white;
+    -fx-border-color: #d5d5d5;
+}
+
+.metric-value {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #222222;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #cfcfcf;
+    -fx-border-width: 1px;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #e9eef5;
+    -fx-background-radius: 4px 4px 0 0;
+    -fx-padding: 6px 0;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #e3e3e3 transparent;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #fafafa;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #d9e8ff;
+}
+
+.tab {
+    -fx-background-color: #e9eef5;
+    -fx-border-color: #c7d2e2;
+    -fx-border-width: 1px 1px 0 1px;
+    -fx-padding: 6px 10px;
+}
+
+.tab:selected {
+    -fx-background-color: white;
+}
+
+.light-theme .page-header {
+    -fx-background-color: #dbe4f0;
+    -fx-border-color: #b7c4d6;
+}
+
+.dark-theme .page-header {
+    -fx-background-color: #1f2937;
+    -fx-border-color: #475569;
+}
+
+.light-theme .page-header .label,
+.light-theme .theme-box .label,
+.light-theme .theme-box .field-label {
+    -fx-text-fill: #222222;
+}
+
+.dark-theme .page-header .label,
+.dark-theme .theme-box .label,
+.dark-theme .theme-box .field-label {
+    -fx-text-fill: #f3f4f6;
+}
+
+.light-theme .page-subtitle {
+    -fx-text-fill: #555555;
+}
+
+.dark-theme .page-subtitle {
+    -fx-text-fill: #cbd5e1;
+}
+
+.dark-theme .section-title,
+.dark-theme .field-label,
+.dark-theme .table-view .column-header .label,
+.dark-theme .table-cell,
+.dark-theme .label {
+    -fx-text-fill: #f3f4f6;
+}
+
+.dark-theme .section-subtitle,
+.dark-theme .metric-label {
+    -fx-text-fill: #cbd5e1;
+}
+
+.dark-theme .section-card {
+    -fx-background-color: #111827;
+    -fx-border-color: #334155;
+}
+
+.dark-theme .text-field,
+.dark-theme .combo-box,
+.dark-theme .date-picker,
+.dark-theme .text-area {
+    -fx-background-color: #0f172a;
+    -fx-control-inner-background: #0f172a;
+    -fx-border-color: #475569;
+    -fx-text-fill: #f3f4f6;
+    -fx-prompt-text-fill: #94a3b8;
+}
+
+.dark-theme .combo-box .list-cell,
+.dark-theme .combo-box-popup .list-cell,
+.dark-theme .combo-box-popup .list-view,
+.dark-theme .combo-box-base,
+.dark-theme .combo-box .text {
+    -fx-background-color: #0f172a;
+    -fx-control-inner-background: #0f172a;
+    -fx-text-fill: #f3f4f6;
+}
+
+.dark-theme .combo-box-popup .list-cell:filled:hover,
+.dark-theme .combo-box-popup .list-cell:filled:selected {
+    -fx-background-color: #1e3a5f;
+    -fx-text-fill: #f3f4f6;
+}
+
+.dark-theme .combo-box .arrow,
+.dark-theme .date-picker .arrow {
+    -fx-background-color: #f3f4f6;
+}
+
+.dark-theme .metric-strip,
+.dark-theme .metric-card,
+.dark-theme .table-view,
+.dark-theme .tab {
+    -fx-background-color: #1f2937;
+    -fx-border-color: #475569;
+}
+
+.dark-theme .table-view .column-header-background {
+    -fx-background-color: #273449;
+}
+
+.dark-theme .table-row-cell {
+    -fx-background-color: #111827;
+    -fx-border-color: transparent transparent #334155 transparent;
+}
+
+.dark-theme .table-row-cell:odd {
+    -fx-background-color: #172033;
+}
+
+.dark-theme .tab:selected {
+    -fx-background-color: #111827;
+}

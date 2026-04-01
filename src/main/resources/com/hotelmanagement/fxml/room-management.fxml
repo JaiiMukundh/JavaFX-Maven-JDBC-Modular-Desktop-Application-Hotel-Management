@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hotelmanagement.controller.RoomController"
+            fitToWidth="true" fitToHeight="true">
+    <VBox fx:id="roomManagementVBox" styleClass="page-shell" fillWidth="true">
+        <VBox styleClass="section-card">
+            <VBox spacing="4">
+                <Label text="Add Room" styleClass="section-title"/>
+                <Label text="Enter room details."
+                       styleClass="section-subtitle"/>
+            </VBox>
+
+            <GridPane hgap="10" vgap="10">
+                <Label text="Room Number" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="roomNumberField" prefWidth="200" promptText="Ex. 204"
+                           GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Room Type" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="roomTypeCombo" prefWidth="200"
+                          GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Price per Day" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="priceField" prefWidth="200" promptText="Enter price"
+                           GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Button fx:id="addRoomBtn" text="Add Room" styleClass="btn-primary"
+                        GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            </GridPane>
+        </VBox>
+
+        <VBox styleClass="section-card" VBox.vgrow="ALWAYS">
+            <HBox styleClass="toolbar">
+                <Label text="Rooms" styleClass="section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="filterAvailableBtn" text="Show Available"
+                        styleClass="btn-secondary"/>
+                <Button fx:id="showAllRoomsBtn" text="Show All"
+                        styleClass="btn-outline-primary"/>
+                <Button fx:id="deleteRoomBtn" text="Delete Room"
+                        styleClass="btn-danger"/>
+            </HBox>
+
+            <Label text="Current room list."
+                   styleClass="section-subtitle"/>
+
+            <TableView fx:id="roomTableView" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn text="Room ID" prefWidth="100"/>
+                    <TableColumn text="Room Number" prefWidth="120"/>
+                    <TableColumn text="Type" prefWidth="120"/>
+                    <TableColumn text="Price/Day" prefWidth="120"/>
+                    <TableColumn text="Available" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>

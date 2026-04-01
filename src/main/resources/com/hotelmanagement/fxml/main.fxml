@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="mainBorderPane" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hotelmanagement.controller.MainController"
+            prefWidth="1200" prefHeight="750" styleClass="app-shell">
+    <top>
+        <VBox styleClass="page-shell">
+            <HBox styleClass="page-header" alignment="CENTER_LEFT">
+                <VBox spacing="6">
+                    <Label text="Hotel Management" styleClass="page-title"/>
+                    <Label text="Rooms, customers, bookings, and billing."
+                           styleClass="page-subtitle"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <VBox styleClass="theme-box">
+                    <Label text="Theme" styleClass="field-label"/>
+                    <ComboBox fx:id="themeCombo" prefWidth="120"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </top>
+    <center>
+        <VBox style="-fx-padding: 0 12 12 12;">
+            <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
+                <Tab text="Rooms" fx:id="roomTab" closable="false">
+                    <fx:include source="room-management.fxml"/>
+                </Tab>
+                <Tab text="Customers" fx:id="customerTab" closable="false">
+                    <fx:include source="customer-management.fxml"/>
+                </Tab>
+                <Tab text="Bookings" fx:id="bookingTab" closable="false">
+                    <fx:include source="booking-checkout.fxml"/>
+                </Tab>
+                <Tab text="Billing" fx:id="billingTab" closable="false">
+                    <fx:include source="billing.fxml"/>
+                </Tab>
+            </TabPane>
+        </VBox>
+    </center>
+</BorderPane>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hotelmanagement.controller.CustomerController"
+            fitToWidth="true">
+    <VBox fx:id="customerManagementVBox" spacing="20" style="-fx-padding: 20;" fillWidth="true">
+        
+        <!-- Add Customer Section -->
+        <VBox spacing="12">
+            <Label text="Add New Customer" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+            
+            <HBox spacing="15" alignment="TOP_LEFT" prefHeight="100">
+                <VBox spacing="8" prefWidth="250">
+                    <Label text="Customer Name:"/>
+                    <TextField fx:id="customerNameField" prefWidth="250"/>
+                </VBox>
+                
+                <VBox spacing="8" prefWidth="250">
+                    <Label text="Contact Number (10 digits):"/>
+                    <TextField fx:id="contactNumberField" prefWidth="250"/>
+                </VBox>
+                
+                <VBox spacing="8" alignment="BOTTOM_LEFT">
+                    <Button fx:id="addCustomerBtn" text="Add Customer"/>
+                </VBox>
+            </HBox>
+        </VBox>
+        
+        <!-- Action Buttons -->
+        <HBox spacing="15">
+            <Button fx:id="deleteCustomerBtn" text="Delete Customer"/>
+            <Button fx:id="refreshCustomerBtn" text="Refresh"/>
+        </HBox>
+        
+        <!-- Customers Table -->
+        <VBox spacing="12" VBox.vgrow="ALWAYS">
+            <Label text="Customer List" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+            <TableView fx:id="customerTableView" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn text="Customer ID" prefWidth="130"/>
+                    <TableColumn text="Name" prefWidth="200"/>
+                    <TableColumn text="Contact Number" prefWidth="180"/>
+                </columns>
+            </TableView>
+        </VBox>
+        
+        <Region VBox.vgrow="ALWAYS"/>
+    </VBox>
+</ScrollPane>

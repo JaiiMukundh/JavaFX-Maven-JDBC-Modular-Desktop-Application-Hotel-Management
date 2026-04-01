@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hotelmanagement.controller.BillingController"
+            fitToWidth="true" fitToHeight="true">
+    <VBox fx:id="billingVBox" styleClass="page-shell" fillWidth="true">
+        <VBox styleClass="section-card">
+            <VBox spacing="4">
+                <Label text="Billing" styleClass="section-title"/>
+                <Label text="View bill details."
+                       styleClass="section-subtitle"/>
+            </VBox>
+
+            <GridPane hgap="10" vgap="10">
+                <Label text="Select Booking" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="bookingCombo" prefWidth="300"
+                          GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            </GridPane>
+
+            <Separator/>
+
+            <HBox spacing="8" styleClass="metric-strip">
+                <VBox styleClass="metric-card" prefWidth="180">
+                    <Label text="Room Price" styleClass="metric-label"/>
+                    <Label fx:id="roomPriceLabel" text="Rs. 0.00" styleClass="metric-value"/>
+                </VBox>
+
+                <VBox styleClass="metric-card" prefWidth="180">
+                    <Label text="Number of Days" styleClass="metric-label"/>
+                    <Label fx:id="daysLabel" text="0" styleClass="metric-value"/>
+                </VBox>
+
+                <VBox styleClass="metric-card" prefWidth="220">
+                    <Label text="Total Amount" styleClass="metric-label"/>
+                    <Label fx:id="totalAmountLabel" text="Rs. 0.00" styleClass="metric-value"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <VBox styleClass="section-card" VBox.vgrow="ALWAYS">
+            <HBox styleClass="toolbar">
+                <Label text="Bill History" styleClass="section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="deleteBillBtn" text="Delete Selected Bill"
+                        styleClass="btn-outline-primary"/>
+                <Button fx:id="deleteAllBillsBtn" text="Delete All Bills"
+                        styleClass="btn-danger"/>
+            </HBox>
+
+            <Label text="Saved bills."
+                   styleClass="section-subtitle"/>
+
+            <TableView fx:id="billTableView" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn text="Bill ID" prefWidth="80"/>
+                    <TableColumn text="Customer Name" prefWidth="140"/>
+                    <TableColumn text="Room No." prefWidth="100"/>
+                    <TableColumn text="Room Price" prefWidth="110"/>
+                    <TableColumn text="No. of Days" prefWidth="110"/>
+                    <TableColumn text="Total Amount" prefWidth="120"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>

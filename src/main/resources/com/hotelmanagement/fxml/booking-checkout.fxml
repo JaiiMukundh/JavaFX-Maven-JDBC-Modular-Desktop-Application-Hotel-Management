@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hotelmanagement.controller.BookingController"
+            fitToWidth="true" fitToHeight="true">
+    <VBox fx:id="bookingCheckoutVBox" styleClass="page-shell" fillWidth="true">
+        <VBox styleClass="section-card">
+            <VBox spacing="4">
+                <Label text="New Booking" styleClass="section-title"/>
+                <Label text="Create a booking."
+                       styleClass="section-subtitle"/>
+            </VBox>
+
+            <GridPane hgap="10" vgap="10">
+                <Label text="Customer" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="customerCombo" prefWidth="250"
+                          GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Room" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="roomCombo" prefWidth="250"
+                          GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Check-In Date" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <DatePicker fx:id="checkInDatePicker" prefWidth="250"
+                            GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="Check-Out Date" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <DatePicker fx:id="checkOutDatePicker" prefWidth="250"
+                            GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Button fx:id="bookRoomBtn" text="Book Room" styleClass="btn-primary"
+                        GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            </GridPane>
+        </VBox>
+
+        <VBox styleClass="section-card" VBox.vgrow="ALWAYS">
+            <HBox styleClass="toolbar">
+                <Label text="Active Bookings" styleClass="section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="checkoutBtn" text="Checkout Selected Booking"
+                        styleClass="btn-secondary"/>
+            </HBox>
+
+            <Label text="Active bookings."
+                   styleClass="section-subtitle"/>
+
+            <TableView fx:id="bookingTableView" prefHeight="250">
+                <columns>
+                    <TableColumn text="Booking ID" prefWidth="80"/>
+                    <TableColumn text="Customer ID" prefWidth="100"/>
+                    <TableColumn text="Room ID" prefWidth="80"/>
+                    <TableColumn text="Check-In" prefWidth="120"/>
+                    <TableColumn text="Check-Out" prefWidth="120"/>
+                    <TableColumn text="Status" prefWidth="95"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>
