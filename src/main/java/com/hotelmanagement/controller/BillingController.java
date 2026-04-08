@@ -29,6 +29,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class BillingController {
+    private static final int LONG_STAY_DISCOUNT_THRESHOLD_DAYS = 7;
+    private static final double LONG_STAY_DISCOUNT_RATE = 0.10;
 
     @FXML
     private ComboBox<String> bookingCombo;
@@ -36,6 +38,8 @@ public class BillingController {
     private Label roomPriceLabel;
     @FXML
     private Label daysLabel;
+    @FXML
+    private Label discountAmountLabel;
     @FXML
     private Label totalAmountLabel;
     @FXML
@@ -82,7 +86,10 @@ public class BillingController {
         TableColumn<Bill, Integer> daysCol = (TableColumn<Bill, Integer>) billTableView.getColumns().get(4);
         daysCol.setCellValueFactory(new PropertyValueFactory<>("numberOfDays"));
         
-        TableColumn<Bill, Double> totalCol = (TableColumn<Bill, Double>) billTableView.getColumns().get(5);
+        TableColumn<Bill, Double> discountCol = (TableColumn<Bill, Double>) billTableView.getColumns().get(5);
+        discountCol.setCellValueFactory(new PropertyValueFactory<>("discountAmount"));
+
+        TableColumn<Bill, Double> totalCol = (TableColumn<Bill, Double>) billTableView.getColumns().get(6);
         totalCol.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
 
         bookingCombo.setOnAction(e -> handleBookingSelection());
@@ -136,6 +143,7 @@ public class BillingController {
     private void clearBillDisplay() {
         roomPriceLabel.setText("Rs. 0.00");
         daysLabel.setText("0");
+        discountAmountLabel.setText("Rs. 0.00");
         totalAmountLabel.setText("Rs. 0.00");
     }
 
@@ -162,9 +170,12 @@ public class BillingController {
             return;
         }
 
-        double totalAmount = room.getPricePerDay() * daysStayed;
+        double subtotal = room.getPricePerDay() * daysStayed;
+        double discountAmount = calculateDiscount(subtotal, daysStayed);
+        double totalAmount = subtotal - discountAmount;
         roomPriceLabel.setText("Rs. " + String.format("%.2f", room.getPricePerDay()));
         daysLabel.setText(String.valueOf(daysStayed));
+        discountAmountLabel.setText("Rs. " + String.format("%.2f", discountAmount));
         totalAmountLabel.setText("Rs. " + String.format("%.2f", totalAmount));
     }
 
@@ -276,5 +287,9 @@ public class BillingController {
         } catch (SQLException e) {
             return "Booking #" + booking.getBookingId();
         }
+    }
+
+    private double calculateDiscount(double subtotal, long daysStayed) {
+        return daysStayed > LONG_STAY_DISCOUNT_THRESHOLD_DAYS ? subtotal * LONG_STAY_DISCOUNT_RATE : 0.0;
     }
 }

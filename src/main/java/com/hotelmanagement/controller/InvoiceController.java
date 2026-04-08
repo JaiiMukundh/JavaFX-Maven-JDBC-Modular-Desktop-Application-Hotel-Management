@@ -20,6 +20,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 public class InvoiceController {
+    private static final int LONG_STAY_DISCOUNT_THRESHOLD_DAYS = 7;
+    private static final double LONG_STAY_DISCOUNT_RATE = 0.10;
 
     @FXML
     private Label invoiceNumberLabel;
@@ -46,6 +48,8 @@ public class InvoiceController {
     @FXML
     private Label subtotalLabel;
     @FXML
+    private Label discountLabel;
+    @FXML
     private Label totalLabel;
     @FXML
     private Label statusLabel;
@@ -63,6 +67,8 @@ public class InvoiceController {
     private Customer customer;
     private Room room;
     private long nights;
+    private double subtotalAmount;
+    private double discountAmount;
     private double totalAmount;
 
     @FXML
@@ -99,7 +105,9 @@ public class InvoiceController {
                 return;
             }
 
-            totalAmount = room.getPricePerDay() * nights;
+            subtotalAmount = room.getPricePerDay() * nights;
+            discountAmount = calculateDiscount(subtotalAmount, nights);
+            totalAmount = subtotalAmount - discountAmount;
             renderInvoice();
         } catch (SQLException e) {
             statusLabel.setText("Failed to load invoice data.");
@@ -130,9 +138,12 @@ public class InvoiceController {
         checkOutLabel.setText(booking.getCheckOutDate().format(formatter));
         nightsLabel.setText(String.valueOf(nights));
         roomRateLabel.setText(String.format("Rs. %.2f", room.getPricePerDay()));
-        subtotalLabel.setText(String.format("Rs. %.2f", totalAmount));
+        subtotalLabel.setText(String.format("Rs. %.2f", subtotalAmount));
+        discountLabel.setText(String.format("Rs. %.2f", discountAmount));
         totalLabel.setText(String.format("Rs. %.2f", totalAmount));
-        statusLabel.setText("Ready to confirm checkout.");
+        statusLabel.setText(discountAmount > 0
+                ? String.format("Long-stay discount applied at %.0f%%.", LONG_STAY_DISCOUNT_RATE * 100)
+                : "Ready to confirm checkout.");
         confirmCheckoutBtn.setDisable(false);
     }
 
@@ -157,6 +168,7 @@ public class InvoiceController {
             }
 
             Bill bill = new Bill(booking.getBookingId(), room.getPricePerDay(), (int) nights);
+            bill.setDiscountAmount(discountAmount);
             bill.setTotalAmount(totalAmount);
             billDAO.create(bill);
 
@@ -169,8 +181,8 @@ public class InvoiceController {
 
             AlertUtils.showInfo(
                     "Checkout Successful",
-                    String.format("Checkout completed for %s.\nBill: %s\nTotal: Rs. %.2f",
-                            customer.getName(), invoiceNumberLabel.getText(), totalAmount)
+                    String.format("Checkout completed for %s.\nBill: %s\nDiscount: Rs. %.2f\nTotal: Rs. %.2f",
+                            customer.getName(), invoiceNumberLabel.getText(), discountAmount, totalAmount)
             );
 
             if (stage != null) {
@@ -179,5 +191,9 @@ public class InvoiceController {
         } catch (SQLException e) {
             AlertUtils.showError("Database Error", "Failed to complete checkout: " + e.getMessage());
         }
+    }
+
+    private double calculateDiscount(double subtotal, long nightsStayed) {
+        return nightsStayed > LONG_STAY_DISCOUNT_THRESHOLD_DAYS ? subtotal * LONG_STAY_DISCOUNT_RATE : 0.0;
     }
 }

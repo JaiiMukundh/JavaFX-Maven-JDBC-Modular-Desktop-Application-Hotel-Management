@@ -5,6 +5,7 @@ public class Bill {
     private int bookingId;
     private double roomPrice;
     private int numberOfDays;
+    private double discountAmount;
     private double totalAmount;
     private String customerName;
     private int roomNumber;
@@ -16,22 +17,23 @@ public class Bill {
         this.bookingId = bookingId;
         this.roomPrice = roomPrice;
         this.numberOfDays = numberOfDays;
-        this.totalAmount = roomPrice * numberOfDays;
     }
 
-    public Bill(int billId, int bookingId, double roomPrice, int numberOfDays, double totalAmount) {
+    public Bill(int billId, int bookingId, double roomPrice, int numberOfDays, double discountAmount, double totalAmount) {
         this.billId = billId;
         this.bookingId = bookingId;
         this.roomPrice = roomPrice;
         this.numberOfDays = numberOfDays;
+        this.discountAmount = discountAmount;
         this.totalAmount = totalAmount;
     }
 
-    public Bill(int billId, int bookingId, double roomPrice, int numberOfDays, double totalAmount, String customerName, int roomNumber) {
+    public Bill(int billId, int bookingId, double roomPrice, int numberOfDays, double discountAmount, double totalAmount, String customerName, int roomNumber) {
         this.billId = billId;
         this.bookingId = bookingId;
         this.roomPrice = roomPrice;
         this.numberOfDays = numberOfDays;
+        this.discountAmount = discountAmount;
         this.totalAmount = totalAmount;
         this.customerName = customerName;
         this.roomNumber = roomNumber;
@@ -69,6 +71,14 @@ public class Bill {
         this.numberOfDays = numberOfDays;
     }
 
+    public double getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(double discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
     public double getTotalAmount() {
         return totalAmount;
     }
@@ -100,6 +110,7 @@ public class Bill {
                 ", bookingId=" + bookingId +
                 ", roomPrice=" + roomPrice +
                 ", numberOfDays=" + numberOfDays +
+                ", discountAmount=" + discountAmount +
                 ", totalAmount=" + totalAmount +
                 ", customerName='" + customerName + '\'' +
                 ", roomNumber=" + roomNumber +

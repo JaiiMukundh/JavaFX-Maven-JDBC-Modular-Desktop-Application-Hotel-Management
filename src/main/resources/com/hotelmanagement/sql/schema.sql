@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS bills (
     booking_id INTEGER NOT NULL,
     room_price DECIMAL(10, 2) NOT NULL,
     number_of_days INTEGER NOT NULL,
+    discount_amount DECIMAL(10, 2) DEFAULT 0,
     total_amount DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) ON DELETE CASCADE

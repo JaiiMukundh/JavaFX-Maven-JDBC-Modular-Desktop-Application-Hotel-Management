@@ -17,6 +17,7 @@ public class DatabaseInitializer {
                 String schema = readSqlSchema();
                 executeSqlScript(connection, schema);
                 ensureCustomerColumns(connection);
+                ensureBillColumns(connection);
                 migrateLegacyForeignKeys(connection);
                 System.out.println("Database initialized successfully.");
             }
@@ -97,6 +98,7 @@ public class DatabaseInitializer {
                         booking_id INTEGER NOT NULL,
                         room_price DECIMAL(10, 2) NOT NULL,
                         number_of_days INTEGER NOT NULL,
+                        discount_amount DECIMAL(10, 2) DEFAULT 0,
                         total_amount DECIMAL(10, 2) NOT NULL,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) ON DELETE CASCADE
@@ -116,9 +118,9 @@ public class DatabaseInitializer {
 
             if (tableExists(connection, "bills_legacy")) {
                 statement.execute("""
-                        INSERT INTO bills (bill_id, booking_id, room_price, number_of_days, total_amount, created_at)
-                        SELECT bl.bill_id, bl.booking_id, bl.room_price, bl.number_of_days, bl.total_amount,
-                               COALESCE(bl.created_at, CURRENT_TIMESTAMP)
+                        INSERT INTO bills (bill_id, booking_id, room_price, number_of_days, discount_amount, total_amount, created_at)
+                        SELECT bl.bill_id, bl.booking_id, bl.room_price, bl.number_of_days, COALESCE(bl.discount_amount, 0), bl.total_amount,
+                                COALESCE(bl.created_at, CURRENT_TIMESTAMP)
                         FROM bills_legacy bl
                         INNER JOIN bookings b ON b.booking_id = bl.booking_id
                         """);
@@ -145,6 +147,14 @@ public class DatabaseInitializer {
         if (!columnExists(connection, "customers", "selected_room_number")) {
             try (Statement statement = connection.createStatement()) {
                 statement.execute("ALTER TABLE customers ADD COLUMN selected_room_number VARCHAR(10) DEFAULT ''");
+            }
+        }
+    }
+
+    private static void ensureBillColumns(Connection connection) throws SQLException {
+        if (!columnExists(connection, "bills", "discount_amount")) {
+            try (Statement statement = connection.createStatement()) {
+                statement.execute("ALTER TABLE bills ADD COLUMN discount_amount DECIMAL(10, 2) DEFAULT 0");
             }
         }
     }

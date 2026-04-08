@@ -83,6 +83,10 @@
                         <Label fx:id="subtotalLabel" text="Rs. 0.00" styleClass="metric-value"/>
                     </VBox>
                     <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="Discount" styleClass="metric-label"/>
+                        <Label fx:id="discountLabel" text="Rs. 0.00" styleClass="metric-value"/>
+                    </VBox>
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
                         <Label text="Total Due" styleClass="metric-label"/>
                         <Label fx:id="totalLabel" text="Rs. 0.00" styleClass="metric-value"/>
                     </VBox>

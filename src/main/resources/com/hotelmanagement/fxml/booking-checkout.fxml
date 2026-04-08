@@ -12,6 +12,8 @@
                 <Label text="New Booking" styleClass="section-title"/>
                 <Label text="Create a booking."
                        styleClass="section-subtitle"/>
+                <Label text="Bookings for more than 7 days are eligible for a 10% discount at checkout."
+                       styleClass="helper-text"/>
             </VBox>
 
             <GridPane hgap="10" vgap="10">

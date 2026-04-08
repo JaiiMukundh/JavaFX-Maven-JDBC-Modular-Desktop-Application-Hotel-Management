@@ -10,7 +10,7 @@ import java.util.List;
 public class BillDAO {
     private static final String SELECT_ALL = "SELECT * FROM bills";
     private static final String ACTIVE_BILLS_SQL =
-            "SELECT b.bill_id, b.booking_id, b.room_price, b.number_of_days, b.total_amount, " +
+            "SELECT b.bill_id, b.booking_id, b.room_price, b.number_of_days, b.discount_amount, b.total_amount, " +
             "c.name as customer_name, r.room_number " +
             "FROM bills b " +
             "INNER JOIN bookings bk ON b.booking_id = bk.booking_id " +
@@ -18,13 +18,14 @@ public class BillDAO {
             "INNER JOIN rooms r ON bk.room_id = r.room_id";
 
     public void create(Bill bill) throws SQLException {
-        String sql = "INSERT INTO bills (booking_id, room_price, number_of_days, total_amount) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO bills (booking_id, room_price, number_of_days, discount_amount, total_amount) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DatabaseConnection.getInstance().getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, bill.getBookingId());
             pstmt.setDouble(2, bill.getRoomPrice());
             pstmt.setInt(3, bill.getNumberOfDays());
-            pstmt.setDouble(4, bill.getTotalAmount());
+            pstmt.setDouble(4, bill.getDiscountAmount());
+            pstmt.setDouble(5, bill.getTotalAmount());
             pstmt.executeUpdate();
         }
     }
@@ -110,6 +111,7 @@ public class BillDAO {
                 rs.getInt("booking_id"),
                 rs.getDouble("room_price"),
                 rs.getInt("number_of_days"),
+                rs.getDouble("discount_amount"),
                 rs.getDouble("total_amount")
         );
     }
@@ -120,6 +122,7 @@ public class BillDAO {
                 rs.getInt("booking_id"),
                 rs.getDouble("room_price"),
                 rs.getInt("number_of_days"),
+                rs.getDouble("discount_amount"),
                 rs.getDouble("total_amount"),
                 rs.getString("customer_name"),
                 rs.getInt("room_number")

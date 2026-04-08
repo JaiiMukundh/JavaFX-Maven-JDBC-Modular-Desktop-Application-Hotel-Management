@@ -39,6 +39,11 @@
                 </VBox>
 
                 <VBox styleClass="metric-card" prefWidth="220">
+                    <Label text="Discount" styleClass="metric-label"/>
+                    <Label fx:id="discountAmountLabel" text="Rs. 0.00" styleClass="metric-value"/>
+                </VBox>
+
+                <VBox styleClass="metric-card" prefWidth="220">
                     <Label text="Total Amount" styleClass="metric-label"/>
                     <Label fx:id="totalAmountLabel" text="Rs. 0.00" styleClass="metric-value"/>
                 </VBox>
@@ -65,6 +70,7 @@
                     <TableColumn text="Room No." prefWidth="100"/>
                     <TableColumn text="Room Price" prefWidth="110"/>
                     <TableColumn text="No. of Days" prefWidth="110"/>
+                    <TableColumn text="Discount" prefWidth="100"/>
                     <TableColumn text="Total Amount" prefWidth="120"/>
                 </columns>
             </TableView>
