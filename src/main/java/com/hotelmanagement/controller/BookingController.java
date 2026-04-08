@@ -1,23 +1,19 @@
 package com.hotelmanagement.controller;
 
 import com.hotelmanagement.dao.BookingDAO;
-import com.hotelmanagement.dao.BillDAO;
 import com.hotelmanagement.dao.CustomerDAO;
 import com.hotelmanagement.dao.RoomDAO;
-import com.hotelmanagement.model.Bill;
 import com.hotelmanagement.model.Booking;
 import com.hotelmanagement.model.Customer;
 import com.hotelmanagement.model.Room;
 import com.hotelmanagement.utils.AlertUtils;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,13 +31,10 @@ public class BookingController {
     private Button bookRoomBtn;
     @FXML
     private TableView<Booking> bookingTableView;
-    @FXML
-    private Button checkoutBtn;
 
     private BookingDAO bookingDAO;
     private CustomerDAO customerDAO;
     private RoomDAO roomDAO;
-    private BillDAO billDAO;
 
     private List<Customer> customers;
     private List<Room> rooms;
@@ -55,7 +48,6 @@ public class BookingController {
         bookingDAO = new BookingDAO();
         customerDAO = new CustomerDAO();
         roomDAO = new RoomDAO();
-        billDAO = new BillDAO();
 
         // Setup booking table columns
         TableColumn<Booking, Integer> bookingIdCol = (TableColumn<Booking, Integer>) bookingTableView.getColumns().get(0);
@@ -64,8 +56,8 @@ public class BookingController {
         TableColumn<Booking, Integer> custIdCol = (TableColumn<Booking, Integer>) bookingTableView.getColumns().get(1);
         custIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         
-        TableColumn<Booking, Integer> roomIdCol = (TableColumn<Booking, Integer>) bookingTableView.getColumns().get(2);
-        roomIdCol.setCellValueFactory(new PropertyValueFactory<>("roomId"));
+        TableColumn<Booking, String> roomNumCol = (TableColumn<Booking, String>) bookingTableView.getColumns().get(2);
+        roomNumCol.setCellValueFactory(new PropertyValueFactory<>("roomNumber"));
         
         TableColumn<Booking, LocalDate> checkInCol = (TableColumn<Booking, LocalDate>) bookingTableView.getColumns().get(3);
         checkInCol.setCellValueFactory(new PropertyValueFactory<>("checkInDate"));
@@ -77,7 +69,7 @@ public class BookingController {
         statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         bookRoomBtn.setOnAction(e -> handleBookRoom());
-        checkoutBtn.setOnAction(e -> handleCheckout());
+        configureDatePickers();
 
         loadCustomersAndRooms();
         refreshBookingTable();
@@ -125,6 +117,12 @@ public class BookingController {
             return;
         }
 
+        LocalDate today = LocalDate.now();
+        if (checkInDate.isBefore(today) || checkOutDate.isBefore(today)) {
+            AlertUtils.showError("Validation Error", "You cannot select a date before today.");
+            return;
+        }
+
         if (checkOutDate.isBefore(checkInDate) || checkOutDate.isEqual(checkInDate)) {
             AlertUtils.showError("Validation Error", "Check-out date must be after check-in date!");
             return;
@@ -152,56 +150,11 @@ public class BookingController {
 
             AlertUtils.showInfo("Success", "Room booked successfully!");
             clearBookingForm();
-            ControllerRegistry.refreshBilling();
             updateAvailableRooms();
             refreshBookingTable();
+            ControllerRegistry.refreshRoom();
         } catch (SQLException e) {
             AlertUtils.showError("Database Error", "Failed to book room: " + e.getMessage());
-        }
-    }
-
-    private void handleCheckout() {
-        Booking selectedBooking = bookingTableView.getSelectionModel().getSelectedItem();
-        if (selectedBooking == null) {
-            AlertUtils.showWarning("No Selection", "Please select a booking to checkout!");
-            return;
-        }
-
-        if (AlertUtils.showConfirmation("Confirm Checkout", "Are you sure you want to checkout this booking?")) {
-            try {
-                LocalDate checkInDate = selectedBooking.getCheckInDate();
-                LocalDate checkOutDate = selectedBooking.getCheckOutDate();
-                long daysStayed = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
-
-                Room room = roomDAO.getById(selectedBooking.getRoomId());
-                if (room == null) {
-                    AlertUtils.showError("Error", "Room not found!");
-                    return;
-                }
-
-                double totalAmount = room.getPricePerDay() * daysStayed;
-
-                Bill bill = new Bill(selectedBooking.getBookingId(), room.getPricePerDay(), (int) daysStayed);
-                bill.setTotalAmount(totalAmount);
-                billDAO.create(bill);
-
-                bookingDAO.updateStatus(selectedBooking.getBookingId(), "CHECKED_OUT");
-
-                roomDAO.updateAvailability(room.getRoomId(), true);
-
-                String billMessage = String.format("Checkout Successful!\n\n" +
-                        "Room Price: Rs. %.2f\n" +
-                        "Days Stayed: %d\n" +
-                        "Total Amount: Rs. %.2f",
-                        room.getPricePerDay(), daysStayed, totalAmount);
-
-                AlertUtils.showInfo("Checkout Successful", billMessage);
-                ControllerRegistry.refreshBilling();
-                updateAvailableRooms();
-                refreshBookingTable();
-            } catch (SQLException e) {
-                AlertUtils.showError("Database Error", "Failed to checkout: " + e.getMessage());
-            }
         }
     }
 
@@ -224,6 +177,38 @@ public class BookingController {
     public void refreshTable() {
         loadCustomersAndRooms();
         refreshBookingTable();
+    }
+
+    private void configureDatePickers() {
+        LocalDate today = LocalDate.now();
+        checkInDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isBefore(today));
+            }
+        });
+
+        updateCheckoutDateConstraints(today);
+        checkInDatePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
+            updateCheckoutDateConstraints(newDate != null ? newDate : today);
+            if (newDate != null && checkOutDatePicker.getValue() != null
+                    && checkOutDatePicker.getValue().isBefore(newDate)) {
+                checkOutDatePicker.setValue(null);
+            }
+        });
+    }
+
+    private void updateCheckoutDateConstraints(LocalDate minimumDate) {
+        LocalDate today = LocalDate.now();
+        LocalDate minCheckoutDate = minimumDate != null && minimumDate.isAfter(today) ? minimumDate : today;
+        checkOutDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isBefore(minCheckoutDate));
+            }
+        });
     }
 
     private String formatSelection(int id, String label) {

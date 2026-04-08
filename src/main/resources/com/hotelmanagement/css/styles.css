@@ -282,8 +282,18 @@
 }
 
 .table-row-cell:selected {
-    -fx-background-color: rgba(194, 139, 78, 0.16);
+    -fx-background-color: linear-gradient(to right, rgba(194, 139, 78, 0.34), rgba(31, 78, 95, 0.20));
+    -fx-background-insets: 0;
     -fx-table-cell-border-color: transparent;
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: #10212f;
+    -fx-font-weight: 700;
+}
+
+.table-row-cell:focused:selected {
+    -fx-background-color: linear-gradient(to right, rgba(194, 139, 78, 0.42), rgba(31, 78, 95, 0.28));
 }
 
 .table-row-cell:hover {
@@ -637,6 +647,27 @@
     -fx-background-color: -panel-bg;
 }
 
+.light-theme .table-row-cell:selected {
+    -fx-background-color: linear-gradient(to right, #2d6cdf 0%, #5b9cff 100%);
+    -fx-background-insets: 0;
+}
+
+.light-theme .table-row-cell:selected .table-cell {
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+}
+
+.light-theme .table-row-cell:focused:selected {
+    -fx-background-color: linear-gradient(to right, #1f5fd2 0%, #4c8ef7 100%);
+}
+
+.light-theme .combo-box-popup .list-cell:filled:selected,
+.light-theme .combo-box-popup .list-cell:filled:selected:hover {
+    -fx-background-color: linear-gradient(to right, #2d6cdf 0%, #5b9cff 100%);
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+}
+
 /* Plain final overrides for a simple student-project look */
 .root {
     -fx-background-color: #f4f4f4;
@@ -921,6 +952,174 @@
     -fx-background-color: #172033;
 }
 
+.dark-theme .table-row-cell:selected {
+    -fx-background-color: linear-gradient(to right, #c28b4e, #2b6d82);
+    -fx-background-insets: 0;
+}
+
+.dark-theme .table-row-cell:selected .table-cell {
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: 700;
+}
+
+.dark-theme .table-row-cell:focused:selected {
+    -fx-background-color: linear-gradient(to right, #d29a57, #377e92);
+}
+
 .dark-theme .tab:selected {
     -fx-background-color: #111827;
+}
+
+/* Invoice window */
+.invoice-shell {
+    -fx-background-color: linear-gradient(to bottom right, #fff8ef, #eef5ff);
+}
+
+.invoice-hero {
+    -fx-padding: 22px 26px;
+    -fx-background-color: linear-gradient(to right, #173b48 0%, #2b6d82 58%, #c28b4e 100%);
+    -fx-background-radius: 18px 18px 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(17, 34, 51, 0.18), 20, 0.20, 0, 8);
+}
+
+.invoice-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: 800;
+    -fx-text-fill: white;
+}
+
+.invoice-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.82);
+}
+
+.invoice-badge {
+    -fx-padding: 12px 16px;
+    -fx-background-color: rgba(255, 255, 255, 0.14);
+    -fx-background-radius: 14px;
+    -fx-border-radius: 14px;
+    -fx-border-color: rgba(255, 255, 255, 0.22);
+    -fx-border-width: 1px;
+}
+
+.invoice-badge-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.invoice-badge-value {
+    -fx-font-size: 16px;
+    -fx-font-weight: 800;
+    -fx-text-fill: white;
+}
+
+.invoice-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.invoice-body {
+    -fx-padding: 22px 22px 18px 22px;
+    -fx-spacing: 16px;
+}
+
+.invoice-card {
+    -fx-padding: 18px 20px;
+    -fx-background-color: rgba(255, 255, 255, 0.92);
+    -fx-background-radius: 18px;
+    -fx-border-radius: 18px;
+    -fx-border-color: rgba(31, 78, 95, 0.10);
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(19, 35, 51, 0.08), 16, 0.15, 0, 5);
+}
+
+.invoice-card-accent {
+    -fx-background-color: linear-gradient(to bottom right, rgba(31, 78, 95, 0.06), rgba(194, 139, 78, 0.08));
+}
+
+.invoice-total-card {
+    -fx-background-color: linear-gradient(to bottom right, #173b48, #245c6e);
+}
+
+.invoice-total-card .invoice-card-title,
+.invoice-total-card .invoice-label,
+.invoice-total-card .invoice-value,
+.invoice-total-card .invoice-total-label,
+.invoice-total-card .invoice-total-value,
+.invoice-total-card .label {
+    -fx-text-fill: white;
+}
+
+.invoice-card-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: 800;
+    -fx-text-fill: -color-ink;
+    -fx-padding: 0 0 10px 0;
+}
+
+.invoice-grid {
+    -fx-padding: 4px 0 0 0;
+}
+
+.invoice-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -color-muted;
+}
+
+.invoice-value {
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -color-ink;
+}
+
+.invoice-emphasis {
+    -fx-font-size: 15px;
+    -fx-text-fill: -color-primary;
+}
+
+.invoice-summary {
+    -fx-padding: 6px 0 0 0;
+}
+
+.invoice-total-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+}
+
+.invoice-total-value {
+    -fx-font-size: 22px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #ffd9a8;
+}
+
+.invoice-status {
+    -fx-font-size: 12px;
+    -fx-font-style: italic;
+    -fx-text-fill: -color-accent-strong;
+}
+
+.invoice-footer {
+    -fx-padding: 0 22px 22px 22px;
+    -fx-background-color: transparent;
+}
+
+.combo-box-popup .list-cell:filled:selected,
+.combo-box-popup .list-cell:filled:selected:hover {
+    -fx-background-color: linear-gradient(to right, rgba(194, 139, 78, 0.38), rgba(31, 78, 95, 0.22));
+    -fx-text-fill: #10212f;
+    -fx-font-weight: 700;
+}
+
+.light-theme .combo-box-popup .list-cell:filled:selected,
+.light-theme .combo-box-popup .list-cell:filled:selected:hover {
+    -fx-background-color: linear-gradient(to right, #2d6cdf 0%, #5b9cff 100%);
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+}
+
+.dark-theme .combo-box-popup .list-cell:filled:selected,
+.dark-theme .combo-box-popup .list-cell:filled:selected:hover {
+    -fx-background-color: linear-gradient(to right, #c28b4e, #2b6d82);
+    -fx-text-fill: white;
 }

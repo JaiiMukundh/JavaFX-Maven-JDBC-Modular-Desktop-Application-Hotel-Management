@@ -43,6 +43,7 @@
                     <TableColumn text="Customer ID" prefWidth="130"/>
                     <TableColumn text="Name" prefWidth="200"/>
                     <TableColumn text="Contact Number" prefWidth="180"/>
+                    <TableColumn text="Preferred Room Number" prefWidth="180"/>
                 </columns>
             </TableView>
         </VBox>

@@ -23,8 +23,8 @@
                 <TextField fx:id="contactNumberField" prefWidth="220" promptText="10-digit mobile number"
                            GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                <Label text="Selected Room Number" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="selectedRoomCombo" prefWidth="220"
+                <Label text="Preferred Room Number (Optional)" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="selectedRoomCombo" prefWidth="220" promptText="Leave blank if not assigned"
                           GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
                 <Button fx:id="addCustomerBtn" text="Add Customer" styleClass="btn-primary"
@@ -50,7 +50,7 @@
                     <TableColumn text="Customer ID" prefWidth="130"/>
                     <TableColumn text="Name" prefWidth="180"/>
                     <TableColumn text="Contact Number" prefWidth="170"/>
-                    <TableColumn text="Selected Room Number" prefWidth="170"/>
+                    <TableColumn text="Preferred Room Number" prefWidth="170"/>
                 </columns>
             </TableView>
         </VBox>

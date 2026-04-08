@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookingDAO {
-    private static final String SELECT_ALL = "SELECT * FROM bookings";
-    private static final String SELECT_ACTIVE = SELECT_ALL + " WHERE status = 'ACTIVE'";
+    private static final String SELECT_ALL =
+            "SELECT b.booking_id, b.customer_id, b.room_id, b.check_in_date, b.check_out_date, b.status, " +
+            "r.room_number " +
+            "FROM bookings b INNER JOIN rooms r ON b.room_id = r.room_id";
+    private static final String SELECT_ACTIVE = SELECT_ALL + " WHERE b.status = 'ACTIVE'";
 
     public void create(Booking booking) throws SQLException {
         String sql = "INSERT INTO bookings (customer_id, room_id, check_in_date, check_out_date, status) VALUES (?, ?, ?, ?, ?)";
@@ -51,7 +54,7 @@ public class BookingDAO {
 
     public Booking getById(int bookingId) throws SQLException {
         try (Connection connection = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(SELECT_ALL + " WHERE booking_id = ?")) {
+             PreparedStatement pstmt = connection.prepareStatement(SELECT_ALL + " WHERE b.booking_id = ?")) {
             pstmt.setInt(1, bookingId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 return rs.next() ? mapBooking(rs) : null;
@@ -61,7 +64,7 @@ public class BookingDAO {
 
     public List<Booking> getByCustomerId(int customerId) throws SQLException {
         List<Booking> bookings = new ArrayList<>();
-        String sql = "SELECT * FROM bookings WHERE customer_id = ? AND status = 'ACTIVE'";
+        String sql = SELECT_ALL + " WHERE b.customer_id = ? AND b.status = 'ACTIVE'";
         try (Connection connection = DatabaseConnection.getInstance().getConnection();
             PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, customerId);
@@ -130,7 +133,7 @@ public class BookingDAO {
     }
 
     private Booking mapBooking(ResultSet rs) throws SQLException {
-        return new Booking(
+        Booking booking = new Booking(
                 rs.getInt("booking_id"),
                 rs.getInt("customer_id"),
                 rs.getInt("room_id"),
@@ -138,5 +141,11 @@ public class BookingDAO {
                 rs.getDate("check_out_date").toLocalDate(),
                 rs.getString("status")
         );
+        try {
+            booking.setRoomNumber(rs.getString("room_number"));
+        } catch (SQLException ignored) {
+            booking.setRoomNumber(String.valueOf(booking.getRoomId()));
+        }
+        return booking;
     }
 }

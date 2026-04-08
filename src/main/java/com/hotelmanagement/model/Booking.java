@@ -6,6 +6,7 @@ public class Booking {
     private int bookingId;
     private int customerId;
     private int roomId;
+    private String roomNumber;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
     private String status;
@@ -28,6 +29,14 @@ public class Booking {
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.status = status;
+    }
+
+    public String getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
     }
 
     public int getBookingId() {
@@ -84,6 +93,7 @@ public class Booking {
                 "bookingId=" + bookingId +
                 ", customerId=" + customerId +
                 ", roomId=" + roomId +
+                ", roomNumber='" + roomNumber + '\'' +
                 ", checkInDate=" + checkInDate +
                 ", checkOutDate=" + checkOutDate +
                 ", status='" + status + '\'' +

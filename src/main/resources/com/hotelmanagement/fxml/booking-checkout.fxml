@@ -40,8 +40,6 @@
             <HBox styleClass="toolbar">
                 <Label text="Active Bookings" styleClass="section-title"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button fx:id="checkoutBtn" text="Checkout Selected Booking"
-                        styleClass="btn-secondary"/>
             </HBox>
 
             <Label text="Active bookings."
@@ -51,7 +49,7 @@
                 <columns>
                     <TableColumn text="Booking ID" prefWidth="80"/>
                     <TableColumn text="Customer ID" prefWidth="100"/>
-                    <TableColumn text="Room ID" prefWidth="80"/>
+                    <TableColumn text="Room No." prefWidth="100"/>
                     <TableColumn text="Check-In" prefWidth="120"/>
                     <TableColumn text="Check-Out" prefWidth="120"/>
                     <TableColumn text="Status" prefWidth="95"/>

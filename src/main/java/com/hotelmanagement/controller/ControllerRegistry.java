@@ -5,8 +5,26 @@ package com.hotelmanagement.controller;
  */
 public class ControllerRegistry {
 
+    private static RoomController roomController;
+    private static CustomerController customerController;
     private static BookingController bookingController;
     private static BillingController billingController;
+
+    public static void setRoomController(RoomController controller) {
+        roomController = controller;
+    }
+
+    public static RoomController getRoomController() {
+        return roomController;
+    }
+
+    public static void setCustomerController(CustomerController controller) {
+        customerController = controller;
+    }
+
+    public static CustomerController getCustomerController() {
+        return customerController;
+    }
 
     public static void setBookingController(BookingController controller) {
         bookingController = controller;
@@ -30,6 +48,18 @@ public class ControllerRegistry {
         }
     }
 
+    public static void refreshRoom() {
+        if (roomController != null) {
+            roomController.refreshTable();
+        }
+    }
+
+    public static void refreshCustomer() {
+        if (customerController != null) {
+            customerController.refreshTable();
+        }
+    }
+
     public static void refreshBilling() {
         if (billingController != null) {
             billingController.refreshTable();
@@ -37,6 +67,13 @@ public class ControllerRegistry {
     }
 
     public static void refreshBookingAndBilling() {
+        refreshBooking();
+        refreshBilling();
+    }
+
+    public static void refreshAll() {
+        refreshRoom();
+        refreshCustomer();
         refreshBooking();
         refreshBilling();
     }

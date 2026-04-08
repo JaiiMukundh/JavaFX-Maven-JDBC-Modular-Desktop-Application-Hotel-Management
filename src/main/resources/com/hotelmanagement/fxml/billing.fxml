@@ -10,7 +10,7 @@
         <VBox styleClass="section-card">
             <VBox spacing="4">
                 <Label text="Billing" styleClass="section-title"/>
-                <Label text="View bill details."
+                <Label text="Select an active booking to preview the bill, then checkout here."
                        styleClass="section-subtitle"/>
             </VBox>
 
@@ -19,6 +19,11 @@
                 <ComboBox fx:id="bookingCombo" prefWidth="300"
                           GridPane.rowIndex="0" GridPane.columnIndex="1"/>
             </GridPane>
+
+            <HBox alignment="CENTER_RIGHT">
+                <Button fx:id="checkoutBtn" text="Checkout Invoice"
+                        styleClass="btn-primary"/>
+            </HBox>
 
             <Separator/>
 

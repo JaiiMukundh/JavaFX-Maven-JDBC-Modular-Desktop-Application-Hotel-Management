@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fx:id="invoiceRoot" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hotelmanagement.controller.InvoiceController"
+            fitToWidth="true" fitToHeight="true" styleClass="invoice-shell">
+    <VBox styleClass="page-shell" fillWidth="true">
+        <VBox styleClass="page-header">
+            <HBox alignment="CENTER_LEFT" spacing="14">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Invoice" styleClass="page-title"/>
+                    <Label text="Review the bill, then confirm checkout from this window."
+                           styleClass="page-subtitle"/>
+                </VBox>
+                <VBox styleClass="metric-card" alignment="CENTER_RIGHT">
+                    <Label text="Invoice No." styleClass="metric-label"/>
+                    <Label fx:id="invoiceNumberLabel" text="INV-00000" styleClass="metric-value"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <VBox styleClass="section-card">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Generated On" styleClass="field-label"/>
+                <Label fx:id="generatedAtLabel" text="-" styleClass="section-subtitle"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="statusLabel" text="Ready to confirm checkout." styleClass="helper-text"/>
+            </HBox>
+        </VBox>
+
+        <HBox spacing="16">
+            <VBox styleClass="section-card" HBox.hgrow="ALWAYS">
+                <Label text="Guest Details" styleClass="section-title"/>
+                <GridPane hgap="12" vgap="12" styleClass="form-grid">
+                    <Label text="Customer" styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <Label fx:id="customerNameLabel" text="-" styleClass="helper-text" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <Label text="Contact" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <Label fx:id="contactNumberLabel" text="-" styleClass="helper-text" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <Label text="Booking ID" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <Label fx:id="bookingIdLabel" text="-" styleClass="helper-text" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                </GridPane>
+            </VBox>
+
+            <VBox styleClass="section-card" HBox.hgrow="ALWAYS">
+                <Label text="Room Details" styleClass="section-title"/>
+                <GridPane hgap="12" vgap="12" styleClass="form-grid">
+                    <Label text="Room No." styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <Label fx:id="roomNumberLabel" text="-" styleClass="helper-text" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <Label text="Room Type" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <Label fx:id="roomTypeLabel" text="-" styleClass="helper-text" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <Label text="Rate / Night" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <Label fx:id="roomRateLabel" text="Rs. 0.00" styleClass="helper-text" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                </GridPane>
+            </VBox>
+        </HBox>
+
+        <HBox spacing="16">
+            <VBox styleClass="section-card" HBox.hgrow="ALWAYS">
+                <Label text="Stay Details" styleClass="section-title"/>
+                <GridPane hgap="12" vgap="12" styleClass="form-grid">
+                    <Label text="Check In" styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <Label fx:id="checkInLabel" text="-" styleClass="helper-text" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <Label text="Check Out" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <Label fx:id="checkOutLabel" text="-" styleClass="helper-text" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <Label text="Nights" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <Label fx:id="nightsLabel" text="0" styleClass="helper-text" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                </GridPane>
+            </VBox>
+
+            <VBox styleClass="section-card" HBox.hgrow="ALWAYS">
+                <Label text="Amount Summary" styleClass="section-title"/>
+                <HBox styleClass="metric-strip">
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="Subtotal" styleClass="metric-label"/>
+                        <Label fx:id="subtotalLabel" text="Rs. 0.00" styleClass="metric-value"/>
+                    </VBox>
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="Total Due" styleClass="metric-label"/>
+                        <Label fx:id="totalLabel" text="Rs. 0.00" styleClass="metric-value"/>
+                    </VBox>
+                </HBox>
+                <Label text="This amount will be posted as the final checkout bill."
+                       styleClass="section-subtitle"/>
+            </VBox>
+        </HBox>
+
+        <VBox styleClass="section-card">
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <Button text="Cancel" onAction="#handleClose" styleClass="btn-outline-primary"/>
+                <Button fx:id="confirmCheckoutBtn" text="Confirm Checkout" styleClass="btn-primary"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</ScrollPane>

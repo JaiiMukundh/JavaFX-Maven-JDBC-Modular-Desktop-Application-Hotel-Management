@@ -36,6 +36,7 @@ public class CustomerController {
     @FXML
     @SuppressWarnings("unchecked")
     public void initialize() {
+        ControllerRegistry.setCustomerController(this);
         customerDAO = new CustomerDAO();
         roomDAO = new RoomDAO();
         // Setup table columns with PropertyValueFactory
@@ -48,17 +49,21 @@ public class CustomerController {
         TableColumn<Customer, String> contactCol = (TableColumn<Customer, String>) customerTableView.getColumns().get(2);
         contactCol.setCellValueFactory(new PropertyValueFactory<>("contactNumber"));
 
-        TableColumn<Customer, String> roomCol = (TableColumn<Customer, String>) customerTableView.getColumns().get(3);
-        roomCol.setCellValueFactory(new PropertyValueFactory<>("selectedRoomNumber"));
+        if (customerTableView.getColumns().size() > 3) {
+            TableColumn<Customer, String> roomCol = (TableColumn<Customer, String>) customerTableView.getColumns().get(3);
+            roomCol.setCellValueFactory(new PropertyValueFactory<>("selectedRoomNumber"));
+        }
         
         addCustomerBtn.setOnAction(e -> handleAddCustomer());
         deleteCustomerBtn.setOnAction(e -> handleDeleteCustomer());
         refreshCustomerBtn.setOnAction(e -> refreshCustomerTable());
 
-        try {
-            loadRoomNumbers();
-        } catch (SQLException e) {
-            AlertUtils.showError("Database Error", "Failed to load rooms: " + e.getMessage());
+        if (selectedRoomCombo != null) {
+            try {
+                loadRoomNumbers();
+            } catch (SQLException e) {
+                AlertUtils.showError("Database Error", "Failed to load rooms: " + e.getMessage());
+            }
         }
         refreshCustomerTable();
     }
@@ -66,10 +71,10 @@ public class CustomerController {
     private void handleAddCustomer() {
         String name = customerNameField.getText().trim();
         String contact = contactNumberField.getText().trim();
-        String selectedRoom = selectedRoomCombo.getValue();
+        String selectedRoom = selectedRoomCombo != null ? selectedRoomCombo.getValue() : null;
 
-        if (name.isEmpty() || contact.isEmpty() || selectedRoom == null) {
-            AlertUtils.showError("Validation Error", "All fields are required!");
+        if (name.isEmpty() || contact.isEmpty()) {
+            AlertUtils.showError("Validation Error", "Customer name and contact number are required!");
             return;
         }
 
@@ -113,7 +118,9 @@ public class CustomerController {
 
     private void refreshCustomerTable() {
         try {
-            loadRoomNumbers();
+            if (selectedRoomCombo != null) {
+                loadRoomNumbers();
+            }
             List<Customer> customers = customerDAO.getAll();
             customerTableView.setItems(FXCollections.observableArrayList(customers));
         } catch (SQLException e) {
@@ -124,7 +131,9 @@ public class CustomerController {
     private void clearCustomerForm() {
         customerNameField.clear();
         contactNumberField.clear();
-        selectedRoomCombo.setValue(null);
+        if (selectedRoomCombo != null) {
+            selectedRoomCombo.setValue(null);
+        }
     }
 
     public void refreshTable() {
@@ -133,8 +142,13 @@ public class CustomerController {
 
     private void loadRoomNumbers() throws SQLException {
         List<Room> rooms = roomDAO.getAll();
-        selectedRoomCombo.setItems(FXCollections.observableArrayList(
-                rooms.stream().map(Room::getRoomNumber).toList()
-        ));
+        if (selectedRoomCombo != null) {
+            List<String> roomNumbers = rooms.stream().map(Room::getRoomNumber).toList();
+            selectedRoomCombo.setItems(FXCollections.observableArrayList(roomNumbers));
+            String currentSelection = selectedRoomCombo.getValue();
+            if (currentSelection != null && !roomNumbers.contains(currentSelection)) {
+                selectedRoomCombo.setValue(null);
+            }
+        }
     }
 }

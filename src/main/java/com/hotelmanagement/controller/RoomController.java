@@ -35,6 +35,7 @@ public class RoomController {
     @FXML
     @SuppressWarnings("unchecked")
     public void initialize() {
+        ControllerRegistry.setRoomController(this);
         roomDAO = new RoomDAO();
         
         // Setup table columns with PropertyValueFactory
@@ -76,6 +77,11 @@ public class RoomController {
 
         try {
             double price = Double.parseDouble(priceText);
+
+            if (price < 0) {
+                AlertUtils.showError("Validation Error", "Room price cannot be negative!");
+                return;
+            }
             
             // Check for duplicate room number
             if (roomDAO.getByRoomNumber(roomNumber) != null) {
@@ -89,6 +95,8 @@ public class RoomController {
             AlertUtils.showInfo("Success", "Room added successfully!");
             clearRoomForm();
             refreshRoomTable();
+            ControllerRegistry.refreshCustomer();
+            ControllerRegistry.refreshBookingAndBilling();
         } catch (NumberFormatException e) {
             AlertUtils.showError("Invalid Input", "Price must be a valid number!");
         } catch (SQLException e) {
@@ -120,6 +128,7 @@ public class RoomController {
             try {
                 roomDAO.delete(selectedRoom.getRoomId());
 
+                ControllerRegistry.refreshCustomer();
                 ControllerRegistry.refreshBookingAndBilling();
                 AlertUtils.showInfo("Success", "Room and associated bookings deleted successfully!");
                 refreshRoomTable();
