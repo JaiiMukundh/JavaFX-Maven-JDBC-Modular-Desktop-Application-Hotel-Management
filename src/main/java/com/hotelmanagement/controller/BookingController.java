@@ -30,6 +30,8 @@ public class BookingController {
     @FXML
     private Button bookRoomBtn;
     @FXML
+    private Button deleteBookingBtn;
+    @FXML
     private TableView<Booking> bookingTableView;
 
     private BookingDAO bookingDAO;
@@ -69,6 +71,7 @@ public class BookingController {
         statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         bookRoomBtn.setOnAction(e -> handleBookRoom());
+        deleteBookingBtn.setOnAction(e -> handleDeleteBooking());
         configureDatePickers();
 
         loadCustomersAndRooms();
@@ -160,10 +163,45 @@ public class BookingController {
 
     private void refreshBookingTable() {
         try {
-            List<Booking> bookings = bookingDAO.getActiveBookings();
+            List<Booking> bookings = bookingDAO.getAll();
             bookingTableView.setItems(FXCollections.observableArrayList(bookings));
         } catch (SQLException e) {
             AlertUtils.showError("Database Error", "Failed to load bookings: " + e.getMessage());
+        }
+    }
+
+    private void handleDeleteBooking() {
+        Booking selectedBooking = bookingTableView.getSelectionModel().getSelectedItem();
+        if (selectedBooking == null) {
+            AlertUtils.showWarning("No Selection", "Please select a booking record to delete!");
+            return;
+        }
+
+        if (!AlertUtils.showConfirmation(
+                "Confirm Deletion",
+                "Are you sure you want to delete booking #" + selectedBooking.getBookingId() + "?\n" +
+                        "This will also remove its bill, if one exists, and mark the room as available."
+        )) {
+            return;
+        }
+
+        try {
+            bookingDAO.delete(selectedBooking.getBookingId());
+
+            Room room = roomDAO.getById(selectedBooking.getRoomId());
+            if (room != null) {
+                room.setAvailable(true);
+                roomDAO.update(room);
+            }
+
+            refreshBookingTable();
+            updateAvailableRooms();
+            ControllerRegistry.refreshRoom();
+            ControllerRegistry.refreshBilling();
+
+            AlertUtils.showInfo("Success", "Booking record deleted successfully!");
+        } catch (SQLException e) {
+            AlertUtils.showError("Database Error", "Failed to delete booking: " + e.getMessage());
         }
     }
 

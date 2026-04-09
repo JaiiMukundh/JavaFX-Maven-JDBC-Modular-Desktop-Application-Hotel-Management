@@ -14,6 +14,8 @@
                        styleClass="section-subtitle"/>
                 <Label text="Bookings for more than 7 days are eligible for a 10% discount at checkout."
                        styleClass="helper-text"/>
+                <Label text="Early checkouts still require payment of the full booking amount."
+                       styleClass="helper-text"/>
             </VBox>
 
             <GridPane hgap="10" vgap="10">
@@ -40,11 +42,12 @@
 
         <VBox styleClass="section-card" VBox.vgrow="ALWAYS">
             <HBox styleClass="toolbar">
-                <Label text="Active Bookings" styleClass="section-title"/>
+                <Label text="Bookings" styleClass="section-title"/>
                 <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="deleteBookingBtn" text="Delete Booking" styleClass="btn-danger"/>
             </HBox>
 
-            <Label text="Active bookings."
+            <Label text="All booking records."
                    styleClass="section-subtitle"/>
 
             <TableView fx:id="bookingTableView" prefHeight="250">

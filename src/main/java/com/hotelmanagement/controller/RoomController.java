@@ -55,7 +55,7 @@ public class RoomController {
         availCol.setCellValueFactory(new PropertyValueFactory<>("available"));
         
         // Populate room type combo box
-        roomTypeCombo.setItems(FXCollections.observableArrayList("Single", "Double", "Deluxe"));
+        roomTypeCombo.setItems(FXCollections.observableArrayList("Single", "Double", "Deluxe", "Suite"));
         
         addRoomBtn.setOnAction(e -> handleAddRoom());
         filterAvailableBtn.setOnAction(e -> handleFilterAvailable());

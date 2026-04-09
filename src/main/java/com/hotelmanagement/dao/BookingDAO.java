@@ -5,6 +5,9 @@ import com.hotelmanagement.utils.DatabaseConnection;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,8 +140,8 @@ public class BookingDAO {
                 rs.getInt("booking_id"),
                 rs.getInt("customer_id"),
                 rs.getInt("room_id"),
-                rs.getDate("check_in_date").toLocalDate(),
-                rs.getDate("check_out_date").toLocalDate(),
+                readBookingDate(rs, "check_in_date"),
+                readBookingDate(rs, "check_out_date"),
                 rs.getString("status")
         );
         try {
@@ -147,5 +150,47 @@ public class BookingDAO {
             booking.setRoomNumber(String.valueOf(booking.getRoomId()));
         }
         return booking;
+    }
+
+    private LocalDate readBookingDate(ResultSet rs, String columnLabel) throws SQLException {
+        Object value = rs.getObject(columnLabel);
+        if (value == null) {
+            throw new SQLException("Missing booking date for column: " + columnLabel);
+        }
+
+        if (value instanceof LocalDate localDate) {
+            return localDate;
+        }
+
+        if (value instanceof Date sqlDate) {
+            return sqlDate.toLocalDate();
+        }
+
+        if (value instanceof Number number) {
+            return Instant.ofEpochMilli(number.longValue())
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+        }
+
+        String text = value.toString().trim();
+        if (text.isEmpty()) {
+            throw new SQLException("Empty booking date for column: " + columnLabel);
+        }
+
+        try {
+            return LocalDate.parse(text);
+        } catch (DateTimeParseException ignored) {
+            try {
+                long epoch = Long.parseLong(text);
+                return Instant.ofEpochMilli(epoch).atZone(ZoneId.systemDefault()).toLocalDate();
+            } catch (NumberFormatException numberFormatException) {
+                try {
+                    return Date.valueOf(text).toLocalDate();
+                } catch (IllegalArgumentException dateException) {
+                    throw new SQLException("Unsupported booking date value in " + columnLabel + ": " + text,
+                            dateException);
+                }
+            }
+        }
     }
 }

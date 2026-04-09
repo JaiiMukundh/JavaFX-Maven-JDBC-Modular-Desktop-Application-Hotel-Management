@@ -36,6 +36,8 @@
             <HBox styleClass="toolbar">
                 <Label text="Customers" styleClass="section-title"/>
                 <Region HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="searchCustomerField" prefWidth="240"
+                           promptText="Search customer by name"/>
                 <Button fx:id="refreshCustomerBtn" text="Refresh"
                         styleClass="btn-outline-primary"/>
                 <Button fx:id="deleteCustomerBtn" text="Delete Customer"

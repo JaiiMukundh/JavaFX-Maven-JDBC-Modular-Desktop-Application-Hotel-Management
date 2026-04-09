@@ -6,6 +6,9 @@ import com.hotelmanagement.model.Customer;
 import com.hotelmanagement.model.Room;
 import com.hotelmanagement.utils.AlertUtils;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -20,6 +23,8 @@ public class CustomerController {
     @FXML
     private TextField contactNumberField;
     @FXML
+    private TextField searchCustomerField;
+    @FXML
     private ComboBox<String> selectedRoomCombo;
     @FXML
     private Button addCustomerBtn;
@@ -32,6 +37,8 @@ public class CustomerController {
 
     private CustomerDAO customerDAO;
     private RoomDAO roomDAO;
+    private final ObservableList<Customer> masterCustomers = FXCollections.observableArrayList();
+    private FilteredList<Customer> filteredCustomers;
 
     @FXML
     @SuppressWarnings("unchecked")
@@ -52,6 +59,15 @@ public class CustomerController {
         if (customerTableView.getColumns().size() > 3) {
             TableColumn<Customer, String> roomCol = (TableColumn<Customer, String>) customerTableView.getColumns().get(3);
             roomCol.setCellValueFactory(new PropertyValueFactory<>("selectedRoomNumber"));
+        }
+
+        filteredCustomers = new FilteredList<>(masterCustomers, customer -> true);
+        SortedList<Customer> sortedCustomers = new SortedList<>(filteredCustomers);
+        sortedCustomers.comparatorProperty().bind(customerTableView.comparatorProperty());
+        customerTableView.setItems(sortedCustomers);
+
+        if (searchCustomerField != null) {
+            searchCustomerField.textProperty().addListener((obs, oldValue, newValue) -> applyCustomerFilter(newValue));
         }
         
         addCustomerBtn.setOnAction(e -> handleAddCustomer());
@@ -122,7 +138,8 @@ public class CustomerController {
                 loadRoomNumbers();
             }
             List<Customer> customers = customerDAO.getAll();
-            customerTableView.setItems(FXCollections.observableArrayList(customers));
+            masterCustomers.setAll(customers);
+            applyCustomerFilter(searchCustomerField != null ? searchCustomerField.getText() : null);
         } catch (SQLException e) {
             AlertUtils.showError("Database Error", "Failed to load customers: " + e.getMessage());
         }
@@ -138,6 +155,21 @@ public class CustomerController {
 
     public void refreshTable() {
         refreshCustomerTable();
+    }
+
+    private void applyCustomerFilter(String searchText) {
+        if (filteredCustomers == null) {
+            return;
+        }
+
+        String normalizedSearch = searchText == null ? "" : searchText.trim().toLowerCase();
+        filteredCustomers.setPredicate(customer -> {
+            if (normalizedSearch.isEmpty()) {
+                return true;
+            }
+            String name = customer.getName();
+            return name != null && name.toLowerCase().contains(normalizedSearch);
+        });
     }
 
     private void loadRoomNumbers() throws SQLException {

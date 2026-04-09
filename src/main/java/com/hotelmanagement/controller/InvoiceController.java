@@ -14,6 +14,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +27,7 @@ import java.time.temporal.ChronoUnit;
 public class InvoiceController {
     private static final int LONG_STAY_DISCOUNT_THRESHOLD_DAYS = 7;
     private static final double LONG_STAY_DISCOUNT_RATE = 0.10;
+    private static final DateTimeFormatter DISPLAY_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd MMM yyyy");
 
     @FXML
     private Label invoiceNumberLabel;
@@ -124,18 +130,17 @@ public class InvoiceController {
     }
 
     private void renderInvoice() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
         String invoiceNo = "INV-" + String.format("%05d", bookingId);
 
         invoiceNumberLabel.setText(invoiceNo);
-        generatedAtLabel.setText(LocalDate.now().format(formatter));
+        generatedAtLabel.setText(LocalDate.now().format(DISPLAY_DATE_FORMATTER));
         bookingIdLabel.setText(String.valueOf(bookingId));
         customerNameLabel.setText(customer.getName());
         contactNumberLabel.setText(customer.getContactNumber());
         roomNumberLabel.setText(room.getRoomNumber());
         roomTypeLabel.setText(room.getRoomType());
-        checkInLabel.setText(booking.getCheckInDate().format(formatter));
-        checkOutLabel.setText(booking.getCheckOutDate().format(formatter));
+        checkInLabel.setText(booking.getCheckInDate().format(DISPLAY_DATE_FORMATTER));
+        checkOutLabel.setText(booking.getCheckOutDate().format(DISPLAY_DATE_FORMATTER));
         nightsLabel.setText(String.valueOf(nights));
         roomRateLabel.setText(String.format("Rs. %.2f", room.getPricePerDay()));
         subtotalLabel.setText(String.format("Rs. %.2f", subtotalAmount));
@@ -158,6 +163,7 @@ public class InvoiceController {
         }
 
         try {
+            String invoiceNo = invoiceNumberLabel.getText();
             Bill existingBill = billDAO.getByBookingId(booking.getBookingId());
             if (existingBill != null) {
                 AlertUtils.showWarning("Already Billed", "A bill already exists for this booking.");
@@ -174,6 +180,13 @@ public class InvoiceController {
 
             bookingDAO.updateStatus(booking.getBookingId(), "CHECKED_OUT");
             roomDAO.updateAvailability(room.getRoomId(), true);
+
+            try {
+                saveInvoiceToFolder(invoiceNo, bill);
+            } catch (IOException fileException) {
+                AlertUtils.showError("File Error", "Checkout completed, but the invoice file could not be saved: "
+                        + fileException.getMessage());
+            }
 
             ControllerRegistry.refreshRoom();
             ControllerRegistry.refreshBilling();
@@ -195,5 +208,41 @@ public class InvoiceController {
 
     private double calculateDiscount(double subtotal, long nightsStayed) {
         return nightsStayed > LONG_STAY_DISCOUNT_THRESHOLD_DAYS ? subtotal * LONG_STAY_DISCOUNT_RATE : 0.0;
+    }
+
+    private void saveInvoiceToFolder(String invoiceNumber, Bill bill) throws IOException {
+        Path rootDir = Paths.get(System.getProperty("user.dir")).toAbsolutePath();
+        if (rootDir.getFileName() != null && "hotel-app".equalsIgnoreCase(rootDir.getFileName().toString())
+                && rootDir.getParent() != null) {
+            rootDir = rootDir.getParent();
+        }
+
+        Path invoicesDir = rootDir.resolve("invoices");
+        Files.createDirectories(invoicesDir);
+
+        Path invoiceFile = invoicesDir.resolve(invoiceNumber + ".txt");
+        String content = buildInvoiceFileContent(invoiceNumber, bill);
+        Files.writeString(invoiceFile, content, StandardCharsets.UTF_8);
+    }
+
+    private String buildInvoiceFileContent(String invoiceNumber, Bill bill) {
+        String lineSeparator = System.lineSeparator();
+        StringBuilder builder = new StringBuilder();
+        builder.append("OSDL Hotel Management").append(lineSeparator);
+        builder.append("Invoice Number: ").append(invoiceNumber).append(lineSeparator);
+        builder.append("Generated On: ").append(generatedAtLabel.getText()).append(lineSeparator);
+        builder.append("Booking ID: ").append(bill.getBookingId()).append(lineSeparator);
+        builder.append("Customer Name: ").append(customer.getName()).append(lineSeparator);
+        builder.append("Contact Number: ").append(customer.getContactNumber()).append(lineSeparator);
+        builder.append("Room Number: ").append(room.getRoomNumber()).append(lineSeparator);
+        builder.append("Room Type: ").append(room.getRoomType()).append(lineSeparator);
+        builder.append("Check In: ").append(checkInLabel.getText()).append(lineSeparator);
+        builder.append("Check Out: ").append(checkOutLabel.getText()).append(lineSeparator);
+        builder.append("Nights: ").append(bill.getNumberOfDays()).append(lineSeparator);
+        builder.append("Rate Per Day: Rs. ").append(String.format("%.2f", bill.getRoomPrice())).append(lineSeparator);
+        builder.append("Subtotal: Rs. ").append(String.format("%.2f", subtotalAmount)).append(lineSeparator);
+        builder.append("Discount: Rs. ").append(String.format("%.2f", bill.getDiscountAmount())).append(lineSeparator);
+        builder.append("Total Amount: Rs. ").append(String.format("%.2f", bill.getTotalAmount())).append(lineSeparator);
+        return builder.toString();
     }
 }

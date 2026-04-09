@@ -31,6 +31,7 @@
         
         <!-- Action Buttons -->
         <HBox spacing="15">
+            <TextField fx:id="searchCustomerField" prefWidth="240" promptText="Search customer by name"/>
             <Button fx:id="deleteCustomerBtn" text="Delete Customer"/>
             <Button fx:id="refreshCustomerBtn" text="Refresh"/>
         </HBox>
